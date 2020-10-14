@@ -176,7 +176,7 @@ const ProductTemplate = ({ data }) => {
               itemDiscountPrice={
                 data.prismicProducts.data.product_discount_price
               }
-              itemUrl={`/products/${data.prismicProducts.uid}`}
+              itemUrl={`/${data.prismicProducts.data.product_category.uid}/${data.prismicProducts.uid}`}
               itemDescription={
                 data.prismicProducts.data.product_description.text
               }
