@@ -1,8 +1,8 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
+    title: `Ecommerce`,
+    description: `Prismic and Snipcart demo store example.`,
+    author: `@igordumencic`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -13,6 +13,33 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
+    {
+      resolve: `gatsby-source-prismic`,
+      options: {
+        repositoryName: `test-repo-example`,
+        accessToken: `MC5YNFZUeUJFQUFDWUFHMkpJ.FBBs77-9eR5S77-9NO-_vQMuPkrvv71977-977-9fWM4Wu-_ve-_ve-_vTEjXyM4LSM`,
+        schemas: {
+          products: require("./src/schemas/products.json"),
+          categories: require("./src/schemas/categories.json"),
+          header_promotion: require("./src/schemas/header_promotion.json"),
+        },
+        shouldDownloadImage: ({ node, key, value }) => {
+          return true
+        },
+      },
+    },
+    {
+      resolve: `gatsby-plugin-snipcart-advanced`,
+      options: {
+        version: "3.0.19",
+        publicApiKey:
+          "NTVmODk3ODktODIxMi00YzBkLTg1ZTItYzYzOGJhMjRhOGU4NjM2ODYzNjI1NzAwNDI5ODQy",
+        defaultLang: "en",
+        currency: "eur",
+        openCartOnAdd: false,
+      },
+    },
+    `gatsby-plugin-styled-components`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     {
