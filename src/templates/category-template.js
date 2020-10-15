@@ -6,6 +6,7 @@ import useTagSearch from "../hooks/useTagSearch"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
+import TagSearch from "../components/tagSearch/index"
 
 const Products = styled.div`
   display: grid;
@@ -35,56 +36,7 @@ const CategoryTemplates = ({ data }) => {
         {data.prismicCategories.data.body[0].items.length}{" "}
         {data.prismicCategories.data.category_name.text}.
       </p>
-      <div style={{ marginBottom: 24 }}>
-        <label htmlFor="All" style={{ cursor: "pointer" }}>
-          <input
-            type="radio"
-            id="All"
-            name="All"
-            value="All"
-            onChange={e => setTag(e.target.value)}
-            checked={tag === "All"}
-            style={{ marginRight: 8 }}
-          />
-          <span style={{ marginRight: 24 }}>All Products</span>
-        </label>
-        <label htmlFor="new" style={{ cursor: "pointer" }}>
-          <input
-            type="radio"
-            id="new"
-            name="new"
-            value="New"
-            onChange={e => setTag(e.target.value)}
-            checked={tag === "New"}
-            style={{ marginRight: 8 }}
-          />
-          <span style={{ marginRight: 24 }}>New Products</span>
-        </label>
-        <label htmlFor="On Sale" style={{ cursor: "pointer" }}>
-          <input
-            type="radio"
-            id="On Sale"
-            name="On Sale"
-            value="On Sale"
-            onChange={e => setTag(e.target.value)}
-            checked={tag === "On Sale"}
-            style={{ marginRight: 8 }}
-          />
-          <span style={{ marginRight: 24 }}>On Sale</span>
-        </label>
-        <label htmlFor="Best Seller" style={{ cursor: "pointer" }}>
-          <input
-            type="radio"
-            id="Best Seller"
-            name="Best Seller"
-            value="Best Seller"
-            onChange={e => setTag(e.target.value)}
-            checked={tag === "Best Seller"}
-            style={{ marginRight: 8 }}
-          />
-          <span>Best Seller</span>
-        </label>
-      </div>
+      <TagSearch tag={tag} setTag={setTag} />
       <Products>
         {data.prismicCategories.data.body[0].items
           .filter(({ product }) => {

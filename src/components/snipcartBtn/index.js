@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
 
 const Button = styled.button`
@@ -23,21 +23,25 @@ const SnipcartBtn = ({
   customOptions,
   customValue,
 }) => {
+  const [addingToCart, setAddingToCart] = useState(false)
+
   return (
-    <Button
-      className="snipcart-add-item"
-      data-item-id={itemId}
-      data-item-price={itemDiscountPrice ? itemDiscountPrice : itemPrice}
-      data-item-url={itemUrl}
-      data-item-description={itemDescription}
-      data-item-image={itemImage}
-      data-item-name={itemName}
-      data-item-custom1-name={customName}
-      data-item-custom1-options={customOptions}
-      data-item-custom1-value={customValue}
-    >
-      Add to Cart
-    </Button>
+    <>
+      <Button
+        className="snipcart-add-item"
+        data-item-id={itemId}
+        data-item-price={itemDiscountPrice ? itemDiscountPrice : itemPrice}
+        data-item-url={itemUrl}
+        data-item-description={itemDescription}
+        data-item-image={itemImage}
+        data-item-name={itemName}
+        data-item-custom1-name={customName}
+        data-item-custom1-options={customOptions}
+        data-item-custom1-value={customValue}
+      >
+        Add to Cart
+      </Button>
+    </>
   )
 }
 

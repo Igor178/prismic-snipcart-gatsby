@@ -2,11 +2,24 @@ import { Link } from "gatsby"
 import PropTypes from "prop-types"
 import React, { useContext } from "react"
 import { useStaticQuery, graphql } from "gatsby"
+import styled from "styled-components"
 import { SnipcartContext } from "gatsby-plugin-snipcart-advanced/context"
 import HeaderPromotionBar from "./headerPromotionBar/index"
 
+const Navigation = styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  grid-gap: 24px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`
+
 const Header = ({ siteTitle }) => {
   const { state } = useContext(SnipcartContext)
+  console.log(state)
   const data = useStaticQuery(graphql`
     {
       allPrismicCategories {
@@ -50,18 +63,16 @@ const Header = ({ siteTitle }) => {
             {siteTitle}
           </Link>
         </h1>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr auto",
-            alignItems: "center",
-          }}
-        >
+        <Navigation>
           <div>
             {data.allPrismicCategories.edges.map(({ node }) => (
               <Link
                 key={node.uid}
-                style={{ color: "white", marginRight: 24 }}
+                style={{
+                  color: "white",
+                  marginRight: 24,
+                  textDecoration: "none",
+                }}
                 to={`/${node.uid}`}
               >
                 {node.data.category_name.text}
@@ -70,8 +81,22 @@ const Header = ({ siteTitle }) => {
           </div>
           <div>
             <span style={{ color: "white", marginRight: 16 }}>
-              {state.cartTotal}€
+              {state.cartQuantity} Items
             </span>
+            <button
+              className="snipcart-customer-signin"
+              style={{
+                padding: "6px 16px",
+                cursor: "pointer",
+                backgroundColor: "#ff5678",
+                color: "white",
+                borderRadius: 4,
+                border: "none",
+                marginRight: 16,
+              }}
+            >
+              {state.userStatus === "SignedOut" ? "Login" : "My Account"}
+            </button>
             <button
               className="snipcart-checkout"
               style={{
@@ -83,10 +108,10 @@ const Header = ({ siteTitle }) => {
                 border: "none",
               }}
             >
-              CART
+              Cart
             </button>
           </div>
-        </div>
+        </Navigation>
       </div>
     </header>
   )
