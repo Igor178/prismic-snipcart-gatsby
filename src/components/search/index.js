@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import { useStaticQuery, graphql, Link } from "gatsby"
+import CloseDropdownOnOutsideClick from "./closeDropdownOnOutsideClick"
 
 const Wrapper = styled.div`
   margin-bottom: 16px;
@@ -24,6 +25,7 @@ const Dropdown = styled.div`
   width: 100%;
   margin-top: 2px;
   z-index: 3;
+  display: ${props => (props.visible ? "unset" : "none")};
 `
 
 const DropdownItem = styled.div`
@@ -38,6 +40,7 @@ const DropdownItem = styled.div`
 `
 
 const Search = () => {
+  const [dropdown, setDropdown] = useState(true)
   const data = useStaticQuery(graphql`
     {
       allPrismicProducts {
@@ -75,71 +78,74 @@ const Search = () => {
   return (
     <Wrapper>
       <div style={{ flex: 1 }}>
-        <Input
-          placeholder="Search products..."
-          value={query}
-          onChange={e => {
-            setQuery(e.target.value)
-          }}
-        />
-        <div style={{ position: "relative" }}>
-          <Dropdown>
-            {query &&
-              data.allPrismicProducts.edges
-                .filter(({ node }) =>
-                  node.data.product_title.text
-                    .toLowerCase()
-                    .includes(query.toLowerCase())
-                )
-                .map(({ node }) => {
-                  return (
-                    <Link
-                      key={node.uid}
-                      style={{ textDecoration: "none", color: "black" }}
-                      to={`/${node.data.product_category.document.uid}/${node.uid}`}
-                    >
-                      <DropdownItem>
-                        <p style={{ marginBottom: 0 }}>
-                          {node.data.product_title.text}
-                        </p>
-                        <div style={{ display: "flex" }}>
-                          <p
-                            style={{
-                              color: `${
-                                node.data.product_discount_price
-                                  ? "#C62927"
-                                  : "#1A1B1D"
-                              }`,
-                              textDecoration: `${
-                                node.data.product_discount_price &&
-                                "line-through"
-                              }`,
-                              marginRight: `${
-                                node.data.product_discount_price && "12px"
-                              }`,
-                              marginBottom: 0,
-                            }}
-                          >
-                            {node.data.product_price}€
+        <CloseDropdownOnOutsideClick setDropdown={setDropdown}>
+          <Input
+            placeholder="Search products..."
+            value={query}
+            onFocus={e => setDropdown(true)}
+            onChange={e => {
+              setQuery(e.target.value)
+            }}
+          />
+          <div style={{ position: "relative" }}>
+            <Dropdown visible={dropdown}>
+              {query &&
+                data.allPrismicProducts.edges
+                  .filter(({ node }) =>
+                    node.data.product_title.text
+                      .toLowerCase()
+                      .includes(query.toLowerCase())
+                  )
+                  .map(({ node }) => {
+                    return (
+                      <Link
+                        key={node.uid}
+                        style={{ textDecoration: "none", color: "black" }}
+                        to={`/${node.data.product_category.document.uid}/${node.uid}`}
+                      >
+                        <DropdownItem>
+                          <p style={{ marginBottom: 0 }}>
+                            {node.data.product_title.text}
                           </p>
-                          {node.data.product_discount_price && (
+                          <div style={{ display: "flex" }}>
                             <p
                               style={{
-                                color: "#1A1B1D",
-                                fontWeight: "bold",
+                                color: `${
+                                  node.data.product_discount_price
+                                    ? "#C62927"
+                                    : "#1A1B1D"
+                                }`,
+                                textDecoration: `${
+                                  node.data.product_discount_price &&
+                                  "line-through"
+                                }`,
+                                marginRight: `${
+                                  node.data.product_discount_price && "12px"
+                                }`,
                                 marginBottom: 0,
                               }}
                             >
-                              {node.data.product_discount_price}€
+                              {node.data.product_price}€
                             </p>
-                          )}
-                        </div>
-                      </DropdownItem>
-                    </Link>
-                  )
-                })}
-          </Dropdown>
-        </div>
+                            {node.data.product_discount_price && (
+                              <p
+                                style={{
+                                  color: "#1A1B1D",
+                                  fontWeight: "bold",
+                                  marginBottom: 0,
+                                }}
+                              >
+                                {node.data.product_discount_price}€
+                              </p>
+                            )}
+                          </div>
+                        </DropdownItem>
+                      </Link>
+                    )
+                  })}
+            </Dropdown>
+          </div>
+        </CloseDropdownOnOutsideClick>
       </div>
     </Wrapper>
   )
