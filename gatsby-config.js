@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: `Ecommerce`,
+    title: `Prismic & Snipcart`,
     description: `Prismic and Snipcart demo store example.`,
     author: `@igordumencic`,
   },

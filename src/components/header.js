@@ -5,6 +5,7 @@ import { useStaticQuery, graphql } from "gatsby"
 import styled from "styled-components"
 import { SnipcartContext } from "gatsby-plugin-snipcart-advanced/context"
 import HeaderPromotionBar from "./headerPromotionBar/index"
+import Search from "./search/index"
 
 const Navigation = styled.div`
   display: grid;
@@ -14,6 +15,17 @@ const Navigation = styled.div`
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+  }
+`
+
+const Menu = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+
+  a {
+    color: white;
+    text-decoration: none;
+    padding: 12px;
   }
 `
 
@@ -63,22 +75,16 @@ const Header = ({ siteTitle }) => {
             {siteTitle}
           </Link>
         </h1>
+        <Search />
         <Navigation>
-          <div>
+          <Menu>
+            <Link to="/">Home</Link>
             {data.allPrismicCategories.edges.map(({ node }) => (
-              <Link
-                key={node.uid}
-                style={{
-                  color: "white",
-                  marginRight: 24,
-                  textDecoration: "none",
-                }}
-                to={`/${node.uid}`}
-              >
+              <Link key={node.uid} to={`/${node.uid}`}>
                 {node.data.category_name.text}
               </Link>
             ))}
-          </div>
+          </Menu>
           <div>
             <span style={{ color: "white", marginRight: 16 }}>
               {state.cartQuantity} Items

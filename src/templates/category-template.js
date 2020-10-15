@@ -42,6 +42,8 @@ const CategoryTemplates = ({ data }) => {
           .filter(({ product }) => {
             if (tag === "All") {
               return product
+            } else if (tag === "In Stock") {
+              return product.document.data.stock === true
             } else {
               return product.document.data.product_tag === tag
             }

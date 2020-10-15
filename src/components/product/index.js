@@ -79,6 +79,8 @@ const Product = () => {
           .filter(({ node }) => {
             if (tag === "All") {
               return node
+            } else if (tag === "In Stock") {
+              return node.data.stock === true
             } else {
               return node.data.product_tag === tag
             }
