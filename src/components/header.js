@@ -31,7 +31,7 @@ const Menu = styled.div`
 
 const Header = ({ siteTitle }) => {
   const { state } = useContext(SnipcartContext)
-  console.log(state)
+
   const data = useStaticQuery(graphql`
     {
       allPrismicCategories {
