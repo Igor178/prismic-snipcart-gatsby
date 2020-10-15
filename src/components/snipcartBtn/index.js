@@ -19,6 +19,9 @@ const SnipcartBtn = ({
   itemDescription,
   itemImage,
   itemName,
+  customName,
+  customOptions,
+  customValue,
 }) => {
   return (
     <Button
@@ -29,6 +32,9 @@ const SnipcartBtn = ({
       data-item-description={itemDescription}
       data-item-image={itemImage}
       data-item-name={itemName}
+      data-item-custom1-name={customName}
+      data-item-custom1-options={customOptions}
+      data-item-custom1-value={customValue}
     >
       Add to Cart
     </Button>

@@ -63,18 +63,27 @@ const ProductGrid = styled.div`
 
 const ProductTemplate = ({ data }) => {
   const [active, setActive] = useState(0)
+  const [customValue, setCustomValue] = useState(
+    data.prismicProducts.data.product_size_variants[0]?.size.text
+  )
 
-  // const [price, setPrice] = useState(0)
+  const createStringVariants = values => {
+    return values
+      .map(option => {
+        const price =
+          option.price >= 0 ? `[+${option.price}]` : `[${option.price}]`
+        return `${option.size.text}${price}`
+      })
+      .join("|")
+  }
 
-  // const createStringVariants = values => {
-  //   return values
-  //     .map(option => {
-  //       const price =
-  //         option.price >= 0 ? `[+${option.price}]` : `[${option.price}]`
-  //       return `${option.size.text}${price}`
-  //     })
-  //     .join("|")
-  // }
+  const updatePrice = (basePrice, values) => {
+    const selectedOption = values.find(
+      option => option.size.text === customValue
+    )
+
+    return (basePrice + selectedOption.price).toFixed(2)
+  }
 
   return (
     <Layout>
@@ -147,7 +156,13 @@ const ProductTemplate = ({ data }) => {
                 }`,
               }}
             >
-              {data.prismicProducts.data.product_price}€
+              {data.prismicProducts.data.product_size_variants.length
+                ? updatePrice(
+                    data.prismicProducts.data.product_price,
+                    data.prismicProducts.data.product_size_variants
+                  )
+                : data.prismicProducts.data.product_price}
+              €
             </p>
             {data.prismicProducts.data.product_discount_price && (
               <p style={{ color: "#1A1B1D", fontWeight: "bold" }}>
@@ -155,7 +170,31 @@ const ProductTemplate = ({ data }) => {
               </p>
             )}
           </div>
-
+          {data.prismicProducts.data.product_size_variants.length ? (
+            <div style={{ marginBottom: 16 }}>
+              <label htmlFor="size" style={{ fontSize: 14 }}>
+                Size
+              </label>
+              <br />
+              <select
+                name="size"
+                id="size"
+                style={{ padding: 8, width: "100%" }}
+                value={customValue}
+                onChange={e => setCustomValue(e.target.value)}
+              >
+                {data.prismicProducts.data.product_size_variants.map(
+                  variant => {
+                    return (
+                      <option value={variant.size.text} key={variant.size.text}>
+                        {variant.size.text}
+                      </option>
+                    )
+                  }
+                )}
+              </select>
+            </div>
+          ) : null}
           <p>{data.prismicProducts.data.product_description.text}</p>
           {data.prismicProducts.data.stock === false ? (
             <p
@@ -185,6 +224,15 @@ const ProductTemplate = ({ data }) => {
                   .localFile.childImageSharp.fluid.src
               }
               itemName={data.prismicProducts.data.product_title.text}
+              customName={
+                data.prismicProducts.data.product_size_variants.length
+                  ? "Size"
+                  : null
+              }
+              customOptions={createStringVariants(
+                data.prismicProducts.data.product_size_variants
+              )}
+              customValue={customValue}
             >
               Add to Cart
             </SnipcartBtn>

@@ -21,7 +21,6 @@ const Products = styled.div`
 `
 
 const CategoryTemplates = ({ data }) => {
-  console.log(data)
   return (
     <Layout>
       <SEO title={data.prismicCategories.data.category_name.text} />
