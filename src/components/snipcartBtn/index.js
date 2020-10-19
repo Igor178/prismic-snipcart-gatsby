@@ -9,6 +9,11 @@ const Button = styled.button`
   color: white;
   border-radius: 4px;
   border: none;
+
+  :disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `
 
 const SnipcartBtn = ({
@@ -22,6 +27,8 @@ const SnipcartBtn = ({
   customName,
   customOptions,
   customValue,
+  qty,
+  inStock,
 }) => {
   return (
     <>
@@ -36,6 +43,8 @@ const SnipcartBtn = ({
         data-item-custom1-name={customName}
         data-item-custom1-options={customOptions}
         data-item-custom1-value={customValue}
+        data-item-quantity={qty}
+        disabled={inStock}
       >
         Add to Cart
       </Button>

@@ -2,9 +2,10 @@ import React from "react"
 import { useStaticQuery, graphql, Link } from "gatsby"
 import Img from "gatsby-image"
 import styled from "styled-components"
+import createStringVariants from "../../utils/createStringVariants"
 import useTagSearch from "../../hooks/useTagSearch"
-
 import TagSearch from "../../components/tagSearch/index"
+import SnipcartBtn from "../../components/snipcartBtn/index"
 
 const Products = styled.div`
   display: grid;
@@ -37,6 +38,15 @@ const Product = () => {
               product_title {
                 text
               }
+              product_description {
+                text
+              }
+              product_size_variants {
+                price
+                size {
+                  text
+                }
+              }
               stock
               product_category {
                 uid
@@ -64,6 +74,7 @@ const Product = () => {
       }
     }
   `)
+
   return (
     <>
       <h2>
@@ -92,7 +103,7 @@ const Product = () => {
                 key={node.uid}
                 style={{ textDecoration: "none" }}
               >
-                <div style={{ marginBottom: 24, fontFamily: "Roboto" }}>
+                <div style={{ fontFamily: "Roboto" }}>
                   <p
                     style={{
                       padding: 6,
@@ -103,7 +114,6 @@ const Product = () => {
                   >
                     {node.data.product_tag}
                   </p>
-
                   <div style={{ position: "relative" }}>
                     {node.data.stock === false ? (
                       <div
@@ -169,20 +179,70 @@ const Product = () => {
                       </p>
                     )}
                   </div>
-
-                  <button
+                  <div
                     style={{
-                      width: "100%",
-                      cursor: "pointer",
-                      padding: 12,
-                      backgroundColor: "#581A45",
-                      color: "white",
-                      borderRadius: 4,
-                      border: "none",
+                      display: "grid",
+                      gridTemplateColumns: "auto  auto",
+                      alignItems: "center",
+                      gridGap: 16,
                     }}
                   >
-                    Read More
-                  </button>
+                    <button
+                      style={{
+                        cursor: "pointer",
+                        padding: 12,
+                        backgroundColor: "#893d70",
+                        color: "white",
+                        borderRadius: 4,
+                        border: "none",
+                      }}
+                    >
+                      Read More
+                    </button>
+
+                    <SnipcartBtn
+                      style={{
+                        cursor: "pointer",
+                        padding: 12,
+                        backgroundColor: "#581A45",
+                        color: "white",
+                        borderRadius: 4,
+                        border: "none",
+                      }}
+                      itemId={node.data.product_id}
+                      itemPrice={node.data.product_price}
+                      itemDiscountPrice={node.data.product_discount_price}
+                      itemUrl="/"
+                      itemDescription={node.data.product_description.text}
+                      itemImage={
+                        node.data.body[0].items[0].gallery_image.localFile
+                          .childImageSharp.fluid.src
+                      }
+                      itemName={node.data.product_title.text}
+                      customName={
+                        node.data.product_size_variants.length ? "Size" : null
+                      }
+                      customOptions={createStringVariants(
+                        node.data.product_size_variants
+                      )}
+                      inStock={!node.data.stock}
+                    >
+                      Add to Cart
+                    </SnipcartBtn>
+                  </div>
+                  {node.data.product_size_variants.length ? (
+                    <p
+                      style={{
+                        textAlign: "center",
+                        fontSize: 12,
+                        marginTop: 8,
+                        marginBottom: 0,
+                        color: "black",
+                      }}
+                    >
+                      This product has multiple variants.
+                    </p>
+                  ) : null}
                 </div>
               </Link>
             )

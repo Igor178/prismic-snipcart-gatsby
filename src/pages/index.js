@@ -7,7 +7,6 @@ import Product from "../components/product/index"
 const IndexPage = ({ data }) => (
   <Layout>
     <SEO title="Home" />
-
     <Product />
   </Layout>
 )

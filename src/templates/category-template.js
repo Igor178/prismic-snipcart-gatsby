@@ -3,10 +3,11 @@ import { graphql, Link } from "gatsby"
 import Img from "gatsby-image"
 import styled from "styled-components"
 import useTagSearch from "../hooks/useTagSearch"
-
+import createStringVariants from "../utils/createStringVariants"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import TagSearch from "../components/tagSearch/index"
+import SnipcartBtn from "../components/snipcartBtn/index"
 
 const Products = styled.div`
   display: grid;
@@ -132,19 +133,76 @@ const CategoryTemplates = ({ data }) => {
                       </p>
                     )}
                   </div>
-                  <button
+                  <div
                     style={{
-                      width: "100%",
-                      cursor: "pointer",
-                      padding: 12,
-                      backgroundColor: "#581A45",
-                      color: "white",
-                      borderRadius: 4,
-                      border: "none",
+                      display: "grid",
+                      gridTemplateColumns: "auto  auto",
+                      alignItems: "center",
+                      gridGap: 16,
                     }}
                   >
-                    Read More
-                  </button>
+                    <button
+                      style={{
+                        cursor: "pointer",
+                        padding: 12,
+                        backgroundColor: "#893d70",
+                        color: "white",
+                        borderRadius: 4,
+                        border: "none",
+                      }}
+                    >
+                      Read More
+                    </button>
+
+                    <SnipcartBtn
+                      style={{
+                        cursor: "pointer",
+                        padding: 12,
+                        backgroundColor: "#581A45",
+                        color: "white",
+                        borderRadius: 4,
+                        border: "none",
+                      }}
+                      itemId={product.document.data.product_id}
+                      itemPrice={product.document.data.product_price}
+                      itemDiscountPrice={
+                        product.document.data.product_discount_price
+                      }
+                      itemUrl="/"
+                      itemDescription={
+                        product.document.data.product_description.text
+                      }
+                      itemImage={
+                        product.document.data.body[0].items[0].gallery_image
+                          .localFile.childImageSharp.fluid.src
+                      }
+                      itemName={product.document.data.product_title.text}
+                      customName={
+                        product.document.data.product_size_variants.length
+                          ? "Size"
+                          : null
+                      }
+                      customOptions={createStringVariants(
+                        product.document.data.product_size_variants
+                      )}
+                      inStock={!product.document.data.stock}
+                    >
+                      Add to Cart
+                    </SnipcartBtn>
+                  </div>
+                  {product.document.data.product_size_variants.length ? (
+                    <p
+                      style={{
+                        textAlign: "center",
+                        fontSize: 12,
+                        marginTop: 8,
+                        marginBottom: 0,
+                        color: "black",
+                      }}
+                    >
+                      This product has multiple variants.
+                    </p>
+                  ) : null}
                 </div>
               </Link>
             )
@@ -178,8 +236,17 @@ export const pageQuery = graphql`
                       product_title {
                         text
                       }
+                      product_description {
+                        text
+                      }
                       product_title {
                         text
+                      }
+                      product_size_variants {
+                        price
+                        size {
+                          text
+                        }
                       }
                       body {
                         __typename

@@ -2,11 +2,14 @@ import React, { useState } from "react"
 import { graphql, Link } from "gatsby"
 import Img from "gatsby-image"
 import styled from "styled-components"
-
+import createStringVariants from "../utils/createStringVariants"
+import updatePrice from "../utils/updatePrice"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import SnipcartBtn from "../components/snipcartBtn/index"
+import QtyBtn from "../components/qtyBtn/index"
 import RecommendedProducts from "../components/recommendedProducts/index"
+import Breadcrumbs from "../components/breadcrumb/index"
 
 const Thumbnails = styled.div`
   display: grid;
@@ -61,33 +64,17 @@ const ProductGrid = styled.div`
   }
 `
 
-const ProductTemplate = ({ data }) => {
+const ProductTemplate = ({ data, location }) => {
   const [active, setActive] = useState(0)
   const [customValue, setCustomValue] = useState(
     data.prismicProducts.data.product_size_variants[0]?.size.text
   )
-
-  const createStringVariants = values => {
-    return values
-      .map(option => {
-        const price =
-          option.price >= 0 ? `[+${option.price}]` : `[${option.price}]`
-        return `${option.size.text}${price}`
-      })
-      .join("|")
-  }
-
-  const updatePrice = (basePrice, values) => {
-    const selectedOption = values.find(
-      option => option.size.text === customValue
-    )
-
-    return (basePrice + selectedOption.price).toFixed(2)
-  }
+  const [qty, setQty] = useState(1)
 
   return (
     <Layout>
       <SEO title={data.prismicProducts.data.product_title.text} />
+
       <ProductGrid>
         <Thumbnails>
           <div className="thumbnail-previews">
@@ -123,22 +110,31 @@ const ProductTemplate = ({ data }) => {
               backgroundColor: "#FF5678",
               color: "white",
               fontWeight: "bold",
+              marginBottom: 16,
             }}
           >
             {data.prismicProducts.data.product_tag}
           </p>
+          <Breadcrumbs pathname={location.pathname} />
           <Link
             to={`/${data.prismicProducts.data.product_category.uid}`}
-            style={{ fontStyle: "italic", color: "inherit" }}
+            style={{
+              color: "inherit",
+
+              textDecoration: "none",
+              textTransform: "uppercase",
+              fontSize: 14,
+            }}
           >
+            -{" "}
             {
               data.prismicProducts.data.product_category.document.data
                 .category_name.text
             }
           </Link>
-          <h3 style={{ marginTop: 16 }}>
+          <h2 style={{ marginTop: 16 }}>
             {data.prismicProducts.data.product_title.text}
-          </h3>
+          </h2>
           <div style={{ display: "flex" }}>
             <p
               style={{
@@ -159,7 +155,8 @@ const ProductTemplate = ({ data }) => {
               {data.prismicProducts.data.product_size_variants.length
                 ? updatePrice(
                     data.prismicProducts.data.product_price,
-                    data.prismicProducts.data.product_size_variants
+                    data.prismicProducts.data.product_size_variants,
+                    customValue
                   )
                 : data.prismicProducts.data.product_price}
               €
@@ -171,7 +168,7 @@ const ProductTemplate = ({ data }) => {
             )}
           </div>
           {data.prismicProducts.data.product_size_variants.length ? (
-            <div style={{ marginBottom: 16 }}>
+            <div style={{ marginBottom: 24 }}>
               <label htmlFor="size" style={{ fontSize: 14 }}>
                 Size
               </label>
@@ -195,6 +192,7 @@ const ProductTemplate = ({ data }) => {
               </select>
             </div>
           ) : null}
+          <QtyBtn qty={qty} setQty={setQty} />
           <p>{data.prismicProducts.data.product_description.text}</p>
           {data.prismicProducts.data.stock === false ? (
             <p
@@ -233,6 +231,7 @@ const ProductTemplate = ({ data }) => {
                 data.prismicProducts.data.product_size_variants
               )}
               customValue={customValue}
+              qty={qty}
             >
               Add to Cart
             </SnipcartBtn>
