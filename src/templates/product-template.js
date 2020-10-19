@@ -11,6 +11,7 @@ import SnipcartBtn from "../components/snipcartBtn/index"
 import QtyBtn from "../components/qtyBtn/index"
 import RecommendedProducts from "../components/recommendedProducts/index"
 import Breadcrumbs from "../components/breadcrumb/index"
+import ColorVariants from "../components/colorVariants/index"
 
 const Thumbnails = styled.div`
   display: grid;
@@ -204,6 +205,13 @@ const ProductTemplate = ({ data, location }) => {
               </p>
             )}
           </div>
+          {data.prismicProducts.data.product_color_variants.length ? (
+            <ColorVariants
+              variants={data.prismicProducts.data.product_color_variants}
+              pathname={location.pathname}
+            />
+          ) : null}
+
           {data.prismicProducts.data.product_size_variants.length ? (
             <div style={{ marginBottom: 24 }}>
               <label htmlFor="size" style={{ fontSize: 14 }}>
@@ -229,6 +237,7 @@ const ProductTemplate = ({ data, location }) => {
               </select>
             </div>
           ) : null}
+
           <QtyBtn qty={qty} setQty={setQty} />
           <p>{data.prismicProducts.data.product_description.text}</p>
           {data.prismicProducts.data.stock === false ? (
@@ -306,6 +315,12 @@ export const pageQuery = graphql`
         product_size_variants {
           price
           size {
+            text
+          }
+        }
+        product_color_variants {
+          color
+          product_link {
             text
           }
         }

@@ -1,125 +1,140 @@
 {
-  "Main": {
-    "uid": {
-      "type": "UID",
-      "config": {
-        "label": "Slug",
-        "placeholder": "green-shirt"
+  "Main" : {
+    "uid" : {
+      "type" : "UID",
+      "config" : {
+        "label" : "Slug",
+        "placeholder" : "green-shirt"
       }
     },
-    "product_id": {
-      "type": "Number",
-      "config": {
-        "label": "Product ID"
+    "product_id" : {
+      "type" : "Number",
+      "config" : {
+        "label" : "Product ID"
       }
     },
-    "product_title": {
-      "type": "StructuredText",
-      "config": {
-        "single": "heading1, heading2, heading3, heading4, heading5, heading6",
-        "label": "Product Title"
+    "product_title" : {
+      "type" : "StructuredText",
+      "config" : {
+        "single" : "heading1, heading2, heading3, heading4, heading5, heading6",
+        "label" : "Product Title"
       }
     },
-    "product_description": {
-      "type": "StructuredText",
-      "config": {
-        "multi": "paragraph, preformatted, heading1, heading2, heading3, heading4, heading5, heading6, strong, em, hyperlink, image, embed, list-item, o-list-item, rtl",
-        "label": "Product Description"
+    "product_description" : {
+      "type" : "StructuredText",
+      "config" : {
+        "multi" : "paragraph, preformatted, heading1, heading2, heading3, heading4, heading5, heading6, strong, em, hyperlink, image, embed, list-item, o-list-item, rtl",
+        "label" : "Product Description"
       }
     },
-    "product_price": {
-      "type": "Number",
-      "config": {
-        "label": "Product Price"
+    "product_price" : {
+      "type" : "Number",
+      "config" : {
+        "label" : "Product Price"
       }
     },
-    "product_discount_price": {
-      "type": "Number",
-      "config": {
-        "label": "Product Discount Price"
+    "product_discount_price" : {
+      "type" : "Number",
+      "config" : {
+        "label" : "Product Discount Price"
       }
     },
-    "product_tag": {
-      "type": "Select",
-      "config": {
-        "options": [
-          "New",
-          "Best Seller",
-          "On Sale"
-        ],
-        "label": "Product Tag"
+    "product_tag" : {
+      "type" : "Select",
+      "config" : {
+        "options" : [ "New", "Best Seller", "On Sale" ],
+        "label" : "Product Tag"
       }
     },
-    "product_category": {
-      "type": "Link",
-      "config": {
-        "select": "document",
-        "customtypes": [
-          "categories"
-        ],
-        "label": "Product Category"
+    "product_category" : {
+      "type" : "Link",
+      "config" : {
+        "select" : "document",
+        "customtypes" : [ "categories" ],
+        "label" : "Product Category"
       }
     },
-    "stock": {
-      "type": "Boolean",
-      "config": {
-        "placeholder_false": "Out of stock",
-        "placeholder_true": "In stock",
-        "default_value": true,
-        "label": "Stock"
+    "stock" : {
+      "type" : "Boolean",
+      "config" : {
+        "placeholder_false" : "Out of stock",
+        "placeholder_true" : "In stock",
+        "default_value" : true,
+        "label" : "Stock"
       }
     },
-    "product_size_variants": {
-      "type": "Group",
-      "config": {
-        "fields": {
-          "size": {
-            "type": "StructuredText",
-            "config": {
-              "single": "heading1, heading2, heading3, heading4, heading5, heading6",
-              "label": "Size"
+    "product_size_variants" : {
+      "type" : "Group",
+      "config" : {
+        "fields" : {
+          "size" : {
+            "type" : "StructuredText",
+            "config" : {
+              "single" : "heading1, heading2, heading3, heading4, heading5, heading6",
+              "label" : "Size"
             }
           },
-          "price": {
-            "type": "Number",
-            "config": {
-              "label": "Price",
-              "min": -100,
-              "max": 100
+          "price" : {
+            "type" : "Number",
+            "config" : {
+              "label" : "Price",
+              "min" : -100,
+              "max" : 100
             }
           }
         },
-        "label": "Product Size Variants"
+        "label" : "Product Size Variants"
       }
     },
-    "body": {
-      "type": "Slices",
-      "fieldset": "Slice zone",
-      "config": {
-        "labels": {
-          "image_gallery": []
+    "product_color_variants" : {
+      "type" : "Group",
+      "config" : {
+        "fields" : {
+          "color" : {
+            "type" : "Color",
+            "config" : {
+              "label" : "Color"
+            }
+          },
+          "product_link" : {
+            "type" : "StructuredText",
+            "config" : {
+              "single" : "heading1, heading2, heading3, heading4, heading5, heading6",
+              "label" : "Product Link"
+            }
+          }
         },
-        "choices": {
-          "image_gallery": {
-            "type": "Slice",
-            "fieldset": "Image Gallery",
-            "description": "Image Gallery with a title and a caption for each image",
-            "icon": "photo_library",
-            "non-repeat": {},
-            "repeat": {
-              "gallery_image": {
-                "type": "Image",
-                "config": {
-                  "constraint": {
-                    "width": null,
-                    "height": null
+        "label" : "Product Color Variants"
+      }
+    },
+    "body" : {
+      "type" : "Slices",
+      "fieldset" : "Slice zone",
+      "config" : {
+        "labels" : {
+          "image_gallery" : [ ]
+        },
+        "choices" : {
+          "image_gallery" : {
+            "type" : "Slice",
+            "fieldset" : "Image Gallery",
+            "description" : "Image Gallery with a title and a caption for each image",
+            "icon" : "photo_library",
+            "non-repeat" : { },
+            "repeat" : {
+              "gallery_image" : {
+                "type" : "Image",
+                "config" : {
+                  "constraint" : {
+                    "width" : null,
+                    "height" : null
                   },
-                  "thumbnails": [],
-                  "label": "Gallery Image"
+                  "thumbnails" : [ ],
+                  "label" : "Gallery Image"
                 }
               }
             },
-            "display": "grid"
+            "display" : "grid"
           }
         }
       }
