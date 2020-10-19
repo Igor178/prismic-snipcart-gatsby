@@ -3,6 +3,7 @@ import { useStaticQuery, graphql, Link } from "gatsby"
 import Img from "gatsby-image"
 import styled from "styled-components"
 import createStringVariants from "../../utils/createStringVariants"
+import calculateDiscount from "../../utils/calculateDiscount"
 import useTagSearch from "../../hooks/useTagSearch"
 import TagSearch from "../../components/tagSearch/index"
 import SnipcartBtn from "../../components/snipcartBtn/index"
@@ -10,13 +11,13 @@ import SnipcartBtn from "../../components/snipcartBtn/index"
 const Products = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 24px;
+  grid-gap: 32px;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr 1fr;
   }
 
-  @media (max-width: 450px) {
+  @media (max-width: 560px) {
     grid-template-columns: 1fr;
   }
 `
@@ -59,7 +60,7 @@ const Product = () => {
                       alt
                       localFile {
                         childImageSharp {
-                          fluid(maxWidth: 300, maxHeight: 220) {
+                          fluid(maxWidth: 300) {
                             ...GatsbyImageSharpFluid
                           }
                         }
@@ -146,15 +147,36 @@ const Product = () => {
                     ) : null}
 
                     <Img
+                      imgStyle={{ objectFit: "contain" }}
+                      style={{ height: 300 }}
                       fluid={
                         node.data.body[0].items[0].gallery_image.localFile
                           .childImageSharp.fluid
                       }
                     />
                   </div>
-                  <h3 style={{ color: "#1A1B1D", marginTop: 16 }}>
-                    {node.data.product_title.text}
-                  </h3>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <h3 style={{ color: "#1A1B1D", marginTop: 16 }}>
+                      {node.data.product_title.text}
+                    </h3>
+                    {node.data.product_discount_price && (
+                      <p
+                        style={{
+                          marginBottom: 0,
+                          color: "#C62927",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        -{node.data.product_discount_price}%
+                      </p>
+                    )}
+                  </div>
                   <div style={{ display: "flex" }}>
                     <p
                       style={{
@@ -175,7 +197,11 @@ const Product = () => {
                     </p>
                     {node.data.product_discount_price && (
                       <p style={{ color: "#1A1B1D", fontWeight: "bold" }}>
-                        {node.data.product_discount_price}€
+                        {calculateDiscount(
+                          node.data.product_price,
+                          node.data.product_discount_price
+                        )}
+                        €
                       </p>
                     )}
                   </div>

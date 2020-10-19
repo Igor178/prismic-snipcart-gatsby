@@ -1,5 +1,6 @@
 import React from "react"
 import styled from "styled-components"
+import calculateDiscount from "../../utils/calculateDiscount"
 
 const Button = styled.button`
   width: 100%;
@@ -35,7 +36,11 @@ const SnipcartBtn = ({
       <Button
         className="snipcart-add-item"
         data-item-id={itemId}
-        data-item-price={itemDiscountPrice ? itemDiscountPrice : itemPrice}
+        data-item-price={
+          itemDiscountPrice
+            ? calculateDiscount(itemPrice, itemDiscountPrice)
+            : itemPrice
+        }
         data-item-url={itemUrl}
         data-item-description={itemDescription}
         data-item-image={itemImage}

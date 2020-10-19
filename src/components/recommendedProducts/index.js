@@ -86,6 +86,8 @@ const RecommendedProducts = ({ products }) => {
                     ) : null}
 
                     <Img
+                      imgStyle={{ objectFit: "contain" }}
+                      style={{ height: 300 }}
                       fluid={
                         node.data.body[0].items[0].gallery_image.localFile
                           .childImageSharp.fluid

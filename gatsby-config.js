@@ -36,7 +36,7 @@ module.exports = {
           "NTVmODk3ODktODIxMi00YzBkLTg1ZTItYzYzOGJhMjRhOGU4NjM2ODYzNjI1NzAwNDI5ODQy",
         defaultLang: "en",
         currency: "eur",
-        openCartOnAdd: false,
+        openCartOnAdd: true,
       },
     },
     `gatsby-plugin-styled-components`,

@@ -4,6 +4,7 @@ import Img from "gatsby-image"
 import styled from "styled-components"
 import useTagSearch from "../hooks/useTagSearch"
 import createStringVariants from "../utils/createStringVariants"
+import calculateDiscount from "../utils/calculateDiscount"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import TagSearch from "../components/tagSearch/index"
@@ -12,13 +13,13 @@ import SnipcartBtn from "../components/snipcartBtn/index"
 const Products = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 24px;
+  grid-gap: 32px;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr 1fr;
   }
 
-  @media (max-width: 450px) {
+  @media (max-width: 560px) {
     grid-template-columns: 1fr;
   }
 `
@@ -98,16 +99,36 @@ const CategoryTemplates = ({ data }) => {
                       </div>
                     ) : null}
                     <Img
-                      style={{ marginBottom: 16 }}
+                      style={{ marginBottom: 16, height: 300 }}
+                      imgStyle={{ objectFit: "contain" }}
                       fluid={
                         product.document.data.body[0].items[0].gallery_image
                           .localFile.childImageSharp.fluid
                       }
                     />
                   </div>
-                  <h3 style={{ color: "#1A1B1D", marginTop: 16 }}>
-                    {product.document.data.product_title.text}
-                  </h3>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <h3 style={{ color: "#1A1B1D", marginTop: 16 }}>
+                      {product.document.data.product_title.text}
+                    </h3>
+                    {product.document.data.product_discount_price && (
+                      <p
+                        style={{
+                          marginBottom: 0,
+                          color: "#C62927",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        -{product.document.data.product_discount_price}%
+                      </p>
+                    )}
+                  </div>
                   <div style={{ display: "flex" }}>
                     <p
                       style={{
@@ -129,7 +150,11 @@ const CategoryTemplates = ({ data }) => {
                     </p>
                     {product.document.data.product_discount_price && (
                       <p style={{ color: "#1A1B1D", fontWeight: "bold" }}>
-                        {product.document.data.product_discount_price}€
+                        {calculateDiscount(
+                          product.document.data.product_price,
+                          product.document.data.product_discount_price
+                        )}
+                        €
                       </p>
                     )}
                   </div>
@@ -256,7 +281,7 @@ export const pageQuery = graphql`
                               alt
                               localFile {
                                 childImageSharp {
-                                  fluid(maxWidth: 300, maxHeight: 220) {
+                                  fluid(maxWidth: 300) {
                                     ...GatsbyImageSharpFluid
                                   }
                                 }

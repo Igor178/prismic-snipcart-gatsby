@@ -4,6 +4,7 @@ import Img from "gatsby-image"
 import styled from "styled-components"
 import createStringVariants from "../utils/createStringVariants"
 import updatePrice from "../utils/updatePrice"
+import calculateDiscount from "../utils/calculateDiscount"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import SnipcartBtn from "../components/snipcartBtn/index"
@@ -57,7 +58,7 @@ const ProductGrid = styled.div`
   display: grid;
   grid-template-columns: 2fr 1fr;
   grid-gap: 16px;
-  margin-top: 80px;
+  margin-top: 24px;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -96,6 +97,8 @@ const ProductTemplate = ({ data, location }) => {
           </div>
           <div>
             <Img
+              imgStyle={{ objectFit: "contain" }}
+              style={{ height: 600 }}
               fluid={
                 data.prismicProducts.data.body[0].items[active].gallery_image
                   .localFile.childImageSharp.fluid
@@ -132,9 +135,30 @@ const ProductTemplate = ({ data, location }) => {
                 .category_name.text
             }
           </Link>
-          <h2 style={{ marginTop: 16 }}>
-            {data.prismicProducts.data.product_title.text}
-          </h2>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginTop: 16,
+              marginBottom: 24,
+            }}
+          >
+            <h2 style={{ color: "#1A1B1D", marginBottom: 0 }}>
+              {data.prismicProducts.data.product_title.text}
+            </h2>
+            {data.prismicProducts.data.product_discount_price && (
+              <p
+                style={{
+                  marginBottom: 0,
+                  color: "#C62927",
+                  fontWeight: "bold",
+                }}
+              >
+                -{data.prismicProducts.data.product_discount_price}%
+              </p>
+            )}
+          </div>
           <div style={{ display: "flex" }}>
             <p
               style={{
@@ -163,7 +187,20 @@ const ProductTemplate = ({ data, location }) => {
             </p>
             {data.prismicProducts.data.product_discount_price && (
               <p style={{ color: "#1A1B1D", fontWeight: "bold" }}>
-                {data.prismicProducts.data.product_discount_price}€
+                {data.prismicProducts.data.product_size_variants.length
+                  ? calculateDiscount(
+                      updatePrice(
+                        data.prismicProducts.data.product_price,
+                        data.prismicProducts.data.product_size_variants,
+                        customValue
+                      ),
+                      data.prismicProducts.data.product_discount_price
+                    )
+                  : calculateDiscount(
+                      data.prismicProducts.data.product_price,
+                      data.prismicProducts.data.product_discount_price
+                    )}
+                €
               </p>
             )}
           </div>
@@ -228,7 +265,9 @@ const ProductTemplate = ({ data, location }) => {
                   : null
               }
               customOptions={createStringVariants(
-                data.prismicProducts.data.product_size_variants
+                data.prismicProducts.data.product_size_variants,
+                data.prismicProducts.data.product_price,
+                data.prismicProducts.data.product_discount_price
               )}
               customValue={customValue}
               qty={qty}
@@ -339,7 +378,7 @@ export const pageQuery = graphql`
                     alt
                     localFile {
                       childImageSharp {
-                        fluid(maxWidth: 300, maxHeight: 220) {
+                        fluid(maxWidth: 300) {
                           ...GatsbyImageSharpFluid
                         }
                       }
